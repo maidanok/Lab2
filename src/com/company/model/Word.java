@@ -7,8 +7,8 @@ import java.util.List;
  * Created by Admin on 27.03.2017.
  */
 public class Word extends SentenceElement {
-    List<Character> word = new ArrayList<>();
 
+    List<Character> word = new ArrayList<>();
     boolean needSpaseAfrer = true;
 
     public Word(String str) {
@@ -18,7 +18,10 @@ public class Word extends SentenceElement {
     }
 
 
-
+    @Override
+    public boolean iAmWord() {
+        return true;
+    }
 
     @Override
     public void setNeedSpaseAfrer(boolean needSpaseAfrer) {
@@ -30,21 +33,28 @@ public class Word extends SentenceElement {
         return needSpaseAfrer;
     }
 
-
-
+    @Override
+    String getValue() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < word.size(); i++) {
+            stringBuilder.append(word.get(i));
+        }
+        return stringBuilder.toString();
+    }
 
 
     @Override
     public String toString() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         if (isNeedSpaseAfter()) {
-            str += " ";
+            str.append(" ") ;
         }
 
         for (int i = 0; i < word.size(); i++) {
-            str += word.get(i);
+            str.append(word.get(i));
         }
 
-        return str;
+        return str.toString();
     }
+
 }

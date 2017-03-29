@@ -8,6 +8,7 @@ import java.util.List;
  */
 
 public class Punctuation extends SentenceElement {
+
     List<Character> puntuation = new ArrayList<>();
     boolean needSpaseAfter = true;
 
@@ -20,6 +21,11 @@ public class Punctuation extends SentenceElement {
 
 
     @Override
+    public boolean iAmWord() {
+        return false;
+    }
+
+    @Override
     public void setNeedSpaseAfrer(boolean needSpaseAfrer) {
         this.needSpaseAfter = needSpaseAfrer;
     }
@@ -30,14 +36,23 @@ public class Punctuation extends SentenceElement {
     }
 
     @Override
+    String getValue() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < puntuation.size(); i++) {
+            stringBuilder.append(puntuation.get(i));
+        }
+        return stringBuilder.toString();
+    }
+
+    @Override
     public String toString() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         if (isNeedSpaseAfter()) {
-            str += " ";
+            str.append(" ");
         }
         for (int i = 0; i < puntuation.size(); i++) {
-            str += puntuation.get(i);
+            str.append(puntuation.get(i));
         }
-        return str;
+        return str.toString();
     }
 }
