@@ -10,15 +10,19 @@ import java.util.regex.Pattern;
  * Created by Admin on 27.03.2017.
  */
 public class Sentence {
-
     private List<SentenceElement> sentence = new ArrayList<>();
+    //в начале первого предложения абзаца пробел не ставится
+    private boolean isStartSent = true;
+    //переменная которая будет сообщать элементу предложения что перед ним стоит открывающая скобка
+    private boolean aheadOpeningBracked = false;
+    private boolean isfirstWord = isStartSent;
 
     private Pattern wordPattern = Pattern.compile("(([a-zа-я]*[.][a-zа-я]*[.][a-zа-я]*[.]*))|" +
             "(8[(](\\d+))[)](\\d+-\\d+-\\d+)|" +
             "((\\w+[-_.]*)@(\\w+\\.)(\\w+)(\\.\\w+)*)|" +
-            "((\\w+)([-]?)(\\w*))|(\\d+)|([№]\\w*)|([!(),.\\]\\[}{;:][!?.]*)", Pattern.UNICODE_CHARACTER_CLASS);
+            "((\\w+)([-]?)(\\w*))|(\\d+)|([№]\\w*)|([«»!(),.\\]\\[}{;:][!?.]*)", Pattern.UNICODE_CHARACTER_CLASS);
 
-    private Pattern punctuation = Pattern.compile("([!(),.\\]\\[}{;:])", Pattern.UNICODE_CHARACTER_CLASS);
+    private Pattern punctuation = Pattern.compile("([!()«»,.\\]\\[}{;:])", Pattern.UNICODE_CHARACTER_CLASS);
 
     /*  данные паттерны необходимы для поиска знаков препинания
         по принципу выставления пробелов до и после знака.
@@ -26,40 +30,40 @@ public class Sentence {
         Перед всеми остальными пробел не ставится.
         Например: точка или запятая.
     */
-    private Pattern punctNotNeedSpaseAfter = Pattern.compile("[,;\\]:}).!?>]");
-    private Pattern openingBracket = Pattern.compile("[\\{\\(\\[\\<]");
+    private Pattern punctNotNeedSpaseAfter = Pattern.compile("[»,;\\]:}).!?>]");
+    private Pattern openingBracket = Pattern.compile("[\\{\\(\\[\\<«]");
 
-    //переменная которая будет сообщать элементу предложения что перед ним стоит открывающая скобка
-    private boolean aheadOpeningBracked = false;
-
-
-    private boolean isStartSent = true;
-
-
-    public Sentence(String string) {
+    public Sentence(String string, boolean youFistSentence) {
         Matcher wordMatcher = wordPattern.matcher(string);
         while (wordMatcher.find()) {
             this.whoIsWho(wordMatcher.group());
+            isStartSent = youFistSentence;
         }
-        changeOfPlaces();
+//в конце конструктора меняем слова
+//        changeOfPlaces();
     }
 
     /*с помощю данного метдода собираем массив элементов предложения
      и выясняем как они должны расставлять пробелы перед собой
      по умолчанию все перед собой пробел ставят
      */
-
     private void whoIsWho(String applicant) {
         Punctuation punct;
         Word word;
         Matcher findElementMather = punctuation.matcher(applicant);
+
         //нашли слово
         if ((applicant.length() > 2) || (!findElementMather.find())) {
             word = new Word(applicant);
-            if (aheadOpeningBracked) {
+            if ((aheadOpeningBracked)) {
                 word.setNeedSpaseAfrer(false);//если впереди открывающая скобка то перед ней пробел не ставим
             }
+            if (isfirstWord){
+                word.setNeedSpaseAfrer(false);
+                isfirstWord = false;
+            }
             aheadOpeningBracked = false;
+
             sentence.add(word);
 
             // нашли пунктуацию
@@ -110,13 +114,17 @@ public class Sentence {
 
 
         //записываем получившиеся слова и информацию о пробелах в предложение
-        Word first = new Word(stringBuilderLast.toString());
-        first.setNeedSpaseAfrer(needSpaseFirst);
+        Word first = new Word(stringBuilderLast.toString(), needSpaseFirst);
         sentence.set(0, first);
 
-        Word last = new Word(stringBuilderFirst.toString());
-        last.setNeedSpaseAfrer(needSpaseLast);
+        Word last = new Word(stringBuilderFirst.toString(), needSpaseLast);
         sentence.set(j, last);
+
+        //добавим точку в конце если она исчезла вместе с сокращением
+        if (sentence.get(sentence.size() - 1).iAmWord()) {
+            Punctuation punct = new Punctuation(".", false);
+            sentence.add(punct);
+        }
     }
 
     @Override

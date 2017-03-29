@@ -5,31 +5,26 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Admin on 27.03.2017.
+/** один из вариантов([+="\w ,.:;!?-«»]*-*[+="\w ,.:;!?-«»]*)
+ * Created by Pasha on 29.03.2017.
  */
 public class Text {
-    List<Sentence> text = new ArrayList<>();
+    private List<Paragraph> paragraphs = new ArrayList<>();
+    private Pattern paragraphsPattern = Pattern.compile("([[A-z]*|[А-я]*|[1-9]*\\@+=)(\"\\w ,.:;!?\\«\\»\\-*]*)(\\n)",Pattern.UNICODE_CHARACTER_CLASS);
 
-    //конструктор получает текст в виде стринг билдера и разбивает его на предложения
-    //после чего каждое предложение отправляет в элемент массива
-    public Text(StringBuilder stringBuilder) {
-
-
-        Pattern sentencePattern = Pattern.compile("[А-ЯA-Z](([.@])([а-яa-z])|([a-zа-я]*.[a-zа-я]* )" +
-                "|[^?!.\\(]|\\([^\\)]*\\))*([.?!][.?!]*)",Pattern.UNICODE_CHARACTER_CLASS);
-        Matcher sentenceMatcher = sentencePattern.matcher(stringBuilder);
-        while (sentenceMatcher.find()){
-            text.add(new Sentence(sentenceMatcher.group()));
-            System.out.println(sentenceMatcher.group());
+    public Text (StringBuilder stringBuilder){
+        Matcher paragraphsMatcher = paragraphsPattern.matcher(stringBuilder);
+        while (paragraphsMatcher.find()){
+            StringBuilder str =new StringBuilder(paragraphsMatcher.group());
+        paragraphs.add(new Paragraph(str));
         }
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Sentence sentence:text){
-            stringBuilder.append(sentence);
+        for (Paragraph paragraph:paragraphs){
+            stringBuilder.append(paragraph);
         }
         return stringBuilder.toString();
     }

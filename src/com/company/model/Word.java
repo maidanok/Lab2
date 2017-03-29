@@ -17,6 +17,13 @@ public class Word extends SentenceElement {
         }
     }
 
+    public Word(String str, boolean needSpaseAfrer) {
+        for (int i = 0; i < str.length(); i++) {
+            word.add(str.charAt(i));
+        }
+        this.needSpaseAfrer = needSpaseAfrer;
+    }
+
 
     @Override
     public boolean iAmWord() {
@@ -47,13 +54,11 @@ public class Word extends SentenceElement {
     public String toString() {
         StringBuilder str = new StringBuilder();
         if (isNeedSpaseAfter()) {
-            str.append(" ") ;
+            str.append(" ");
         }
-
         for (int i = 0; i < word.size(); i++) {
             str.append(word.get(i));
         }
-
         return str.toString();
     }
 

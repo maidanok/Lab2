@@ -19,6 +19,7 @@ public class FileConnector {
             String line=null;
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line);
+                stringBuilder.append("\n");
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -19,6 +19,13 @@ public class Punctuation extends SentenceElement {
         }
     }
 
+    public Punctuation(String str, boolean needSpaseAfter) {
+        for (int i = 0; i < str.length(); i++) {
+            puntuation.add(str.charAt(i));
+        }
+        this.needSpaseAfter = needSpaseAfter;
+    }
+
 
     @Override
     public boolean iAmWord() {
