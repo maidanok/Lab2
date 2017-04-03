@@ -10,13 +10,14 @@ import java.util.regex.Pattern;
  */
 public class Text {
     private List<Paragraph> paragraphs = new ArrayList<>();
-    private Pattern paragraphsPattern = Pattern.compile("([[A-z]*|[А-я]*|[1-9]*\\@+=)(\"\\w ,.:;!?\\«\\»\\-*]*)(\\n)",Pattern.UNICODE_CHARACTER_CLASS);
+    private Pattern paragraphsPattern = Pattern.compile("(.*)(\\n)",Pattern.UNICODE_CHARACTER_CLASS);
 
     public Text (StringBuilder stringBuilder){
         Matcher paragraphsMatcher = paragraphsPattern.matcher(stringBuilder);
         while (paragraphsMatcher.find()){
             StringBuilder str =new StringBuilder(paragraphsMatcher.group());
         paragraphs.add(new Paragraph(str));
+
         }
     }
 

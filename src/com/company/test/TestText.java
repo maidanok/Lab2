@@ -14,6 +14,5 @@ public class TestText {
         stringBuilder.append("Для .того [квадратные скобки] чтобы начать работу с объектом Matcher, нужно вызвать один из его методов!?");
 
         Paragraph paragraph = new Paragraph(stringBuilder);
-        System.out.println(paragraph);
     }
 }

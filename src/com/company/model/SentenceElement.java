@@ -11,7 +11,6 @@ public abstract class SentenceElement {
 
     public abstract void setNeedSpaseAfrer(boolean needSpaseAfrer);
 
-    //TODO Зачем нужен этот метод???
     abstract public boolean isNeedSpaseAfter();
 
     abstract String getValue();
